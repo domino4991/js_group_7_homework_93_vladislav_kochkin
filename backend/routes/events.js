@@ -6,6 +6,7 @@ router.get('/', auth, async (req, res) => {
     try {
         const events = await Event
             .find({$or: [{sharedUsers: req.user._id}, {user: req.user._id}]})
+            .populate('user', 'email -_id')
             .populate('sharedUsers', 'email -_id');
         if(events.length === 0) return res.status(404).send({error: 'Событий нет'});
         return res.send(events);
@@ -20,7 +21,6 @@ router.post('/', auth, async (req, res) => {
             title: req.body.title,
             datetime: req.body.datetime,
             user: req.user._id,
-            sharedUsers: req.body.sharedUsers,
             duration: req.body.duration
         });
         await event.save();

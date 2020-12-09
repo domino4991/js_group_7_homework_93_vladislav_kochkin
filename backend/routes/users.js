@@ -27,7 +27,11 @@ router.post('/sessions', async (req, res) => {
         if(!isMatch) return res.status(400).send({error: 'Неверный пароль'});
         user.genToken();
         await user.save({validateBeforeSave: false});
-        return res.send(user);
+        return res.send({
+            username: user.username,
+            email: user.email,
+            token: user.token
+        });
     } catch (e) {
         return res.status(400).send(e);
     }
@@ -72,7 +76,11 @@ router.post('/facebookLogin', async (req, res) => {
         }
         user.genToken();
         await user.save({validateBeforeSave: false});
-        return res.send(user);
+        return res.send({
+            username: user.username,
+            email: user.email,
+            token: user.token
+        });
     } catch (e) {
         return res.status(401).send({error: 'Facebook token incorrect'});
     }
