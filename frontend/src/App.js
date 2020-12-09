@@ -1,11 +1,12 @@
 import React from 'react';
 import './App.css';
+import Routes from "./Routes";
+import {useSelector} from "react-redux";
 
 function App() {
+    const { user } = useSelector(state => state.users);
   return (
-    <div className="App">
-      <h1>Hello</h1>
-    </div>
+    <Routes user={user} />
   );
 }
 
