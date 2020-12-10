@@ -15,7 +15,8 @@ const FormElement = ({
     changed,
     error,
     label,
-    classNameInput
+    classNameInput,
+    id
  }) => {
     const classes = useStyles();
     return (
@@ -30,6 +31,7 @@ const FormElement = ({
                 helperText={error}
                 label={label}
                 variant='outlined'
+                id={id}
                 required
             />
         </Grid>
@@ -41,7 +43,7 @@ FormElement.propTypes = {
     name: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
-    error: PropTypes.func,
+    error: PropTypes.string,
     changed: PropTypes.func.isRequired
 }
 

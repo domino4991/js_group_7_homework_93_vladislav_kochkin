@@ -2,6 +2,8 @@ import axiosBase from "../../axiosBase";
 import {put} from 'redux-saga/effects';
 import {toast} from "react-toastify";
 import {
+    addSharedUserError, addSharedUserSuccess,
+    cleanUsersErrorSuccess, getUsersError, getUsersSuccess,
     loginUserError,
     loginUserSuccess, logoutUserError,
     logoutUserSuccess,
@@ -9,6 +11,7 @@ import {
     registerUserSuccess
 } from "../actions/usersActions";
 import {push} from 'connected-react-router';
+import {getEvents} from "../actions/eventsActions";
 
 export function* registerUserSaga({userData}) {
     try {
@@ -23,6 +26,10 @@ export function* registerUserSaga({userData}) {
             yield put(registerUserError(e.message));
         }
     }
+}
+
+export function* cleanUserErrorSaga() {
+    yield put(cleanUsersErrorSuccess());
 }
 
 export function* loginUserSaga({userData}) {
@@ -64,6 +71,34 @@ export function* facebookLoginSaga({data}) {
             yield put(loginUserError(e.response.data));
         } else {
             yield put(loginUserError(e.message));
+        }
+    }
+}
+
+export function* getUsersSaga() {
+    try {
+        const response = yield axiosBase.get('/users');
+        yield put(getUsersSuccess(response.data));
+    } catch (e) {
+        if(e.response && e.response.data) {
+            yield put(getUsersError(e.response.data.error));
+        } else {
+            yield put(getUsersError(e.message));
+        }
+    }
+}
+
+export function* addSharedUserSaga({email}) {
+    try {
+        const response = yield axiosBase.post(`/events/${email}`);
+        yield toast.success(response.data.message);
+        yield put(getEvents());
+        yield put(addSharedUserSuccess());
+    } catch (e) {
+        if(e.response && e.response.data) {
+            yield put(addSharedUserError(e.response.data));
+        } else {
+            yield put(addSharedUserError(e.message));
         }
     }
 }

@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import { Button, Menu, MenuItem } from '@material-ui/core';
 import {useDispatch, useSelector} from "react-redux";
 import {logoutUser} from "../../../store/actions/usersActions";
+import {cleanEventsWhenLogout} from "../../../store/actions/eventsActions";
+import {NavLink} from "react-router-dom";
 
 const UserMenu = () => {
     const {user} = useSelector(state => state.users);
@@ -26,7 +28,24 @@ const UserMenu = () => {
                 onClose={() => setAnchorEl(null)}
             >
                 <MenuItem
-                    onClick={() => dispatch(logoutUser())}
+                    component={NavLink}
+                    to='/'
+                    exact
+                >
+                    Заглушка
+                </MenuItem>
+                <MenuItem
+                    component={NavLink}
+                    to='/calendar'
+                    exact
+                >
+                    Календарь
+                </MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        dispatch(logoutUser())
+                        dispatch(cleanEventsWhenLogout())
+                    }}
                 >
                     Выход
                 </MenuItem>

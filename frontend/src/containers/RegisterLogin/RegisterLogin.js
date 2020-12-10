@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Typography,
     CssBaseline,
@@ -8,7 +8,7 @@ import {
     makeStyles
 } from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
-import {loginUser, registerUser} from "../../store/actions/usersActions";
+import {cleanUserError, loginUser, registerUser} from "../../store/actions/usersActions";
 import FormElement from "../../components/UI/FormElement/FormElement";
 import FacebookLogin from "../../components/FacebookLogin/FacebookLogin";
 
@@ -36,6 +36,10 @@ const RegisterLogin = props => {
         email: '',
         password: ''
     });
+
+    useEffect(() => {
+        dispatch(cleanUserError());
+    }, [dispatch, url]);
 
     const onChangeField = e => {
         const name = e.target.name;

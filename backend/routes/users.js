@@ -3,6 +3,17 @@ const User = require('../models/User');
 const config = require('../config');
 const axios = require('axios');
 const {nanoid} = require('nanoid');
+const auth = require('../auth');
+
+router.get('/', auth, async (req, res) => {
+    try {
+        const users = await User.find().select('email -_id');
+        if(!users) return res.status(404).send({error: 'Пользователей нет.'});
+        return res.send(users);
+    } catch (e) {
+        return res.status(500).send({error: 'Eternal Server Error'});
+    }
+});
 
 router.post('/', async (req, res) => {
     try {
