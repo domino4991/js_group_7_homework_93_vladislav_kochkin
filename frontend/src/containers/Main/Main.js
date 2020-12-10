@@ -93,11 +93,13 @@ const Main = () => {
 
     const onSubmitSharedUser = e => {
         e.preventDefault();
-        dispatch(addSharedUser(sharedUserEmail.email));
-        setSharedUserEmail(prevState => ({
-            ...prevState,
-            email: ''
-        }));
+        if(sharedUserEmail.email !== '') {
+            dispatch(addSharedUser(sharedUserEmail.email));
+            setSharedUserEmail(prevState => ({
+                ...prevState,
+                email: ''
+            }));
+        }
     }
 
     useEffect(() => {
@@ -288,12 +290,12 @@ const Main = () => {
                         >
                             Выберите пользователя
                         </MenuItem>
-                        {users && users.map(item => item.email !== user.email && <MenuItem
+                        {users ? users.map(item => item.email !== user.email && <MenuItem
                             key={item.email}
                             value={item.email}
                         >
                             {item.email}
-                        </MenuItem>)}
+                        </MenuItem>) : <MenuItem value='' disabled selected>Список пуст</MenuItem>}
                     </TextField>
                     <Button
                         fullWidth
